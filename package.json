@@ -29,6 +29,6 @@
     "@babel/core": "^7.12.9"
   },
   "private": true,
-  "name": "KilimoShwari-mobileApp",
+  "name": "kilimoshwari",
   "version": "1.0.0"
 }

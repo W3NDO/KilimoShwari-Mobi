@@ -1,4 +1,4 @@
-import { StyleSheet, Button, Alert, View, KeyboardAvoidingView, Text } from 'react-native';
+import { StyleSheet, Button, Alert, KeyboardAvoidingView, Dimensions, Text } from 'react-native';
 import React, { useContext, useState, useRef} from 'react';
 import t from 'tcomb-form-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,14 +7,19 @@ import AuthContext from '../authProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Calls  from '../services/data';
 
+//for any calls to the backend server
 const call = new Calls();
 
+//for the form
 const Form = t.form.Form
 
 const login_form = t.struct({
     email: t.String,
     password: t.String
 })
+
+const screenWidth = Math.round(Dimensions.get('screen').width);
+const screenHeight = Math.round(Dimensions.get('screen').height);
 
 const options = {
     fields: {
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginTop: 50,
 		padding: 20,
-		backgroundColor: '#fff',
+		width: screenWidth - 25,
 	},
 
 });

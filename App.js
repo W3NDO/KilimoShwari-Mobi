@@ -10,14 +10,28 @@ import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthContext from './components/authProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ViewPolicyScreen } from './components/screens/view_policy';
+import { BuyPolicyScreen } from './components/screens/buy_policy';
 
 
 const AuthStack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const PolicyStack = createStackNavigator();
 
+//The primary stack screen called when you log in to the app
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
     <HomeStack.Screen name='Home' component = {HomeScreen} />
   </HomeStack.Navigator>
+);
+
+const PolicyStackScreen = () => (
+  <PolicyStack.Navigator>
+    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
+    <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
+  </PolicyStack.Navigator>
 );
 
 
@@ -117,8 +131,14 @@ export default function App() {
             <AuthStack.Screen name='Register' component={RegisterScreen} />
           </AuthStack.Navigator>
         ): (
-          <Tabs.Navigator>
-            <Tabs.Screen name='Home' component={HomeStackScreen}/>
+          <Tabs.Navigator
+          screenOptions={({ route }) => ({
+            tabBarActiveTintColor: '#006600',
+            tabBarInactiveTintColor: 'gray',
+          })}
+          >
+            <Tabs.Screen name='Home' component={HomeScreen} />
+            <Tabs.Screen name='Policy' component={PolicyStackScreen} />
           </Tabs.Navigator>
         )}
       </NavigationContainer>

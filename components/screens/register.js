@@ -1,4 +1,4 @@
-import { StyleSheet, Button, Alert, View, KeyboardAvoidingView, Text } from 'react-native';
+import { StyleSheet, Button, Alert, Image, Dimensions, KeyboardAvoidingView, Text } from 'react-native';
 import React, { Component, useContext, useEffect, useState, useRef} from 'react';
 import t from 'tcomb-form-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,6 +10,10 @@ import Calls  from '../services/data';
 const call = new Calls();
 
 const Form = t.form.Form
+
+//screen dimensions
+const screenWidth = Math.round(Dimensions.get('screen').width);
+const screenHeight = Math.round(Dimensions.get('screen').height);
 
 const reg_form = t.struct({
     email: t.String,
@@ -75,21 +79,29 @@ export function RegisterScreen({navigation, form}){
       signUp(form_val);
     }
     return(
-            <KeyboardAvoidingView style = {styles.container}>
-                <Text> Log In </Text>
-                <Form
-                    ref = {form_data}
-                    type = {reg_form}
-                    options = {options}
-                />
-                <Button
-                    title = "Register"
-                    onPress = {reg_proc }/>
+      <KeyboardAvoidingView style = {styles.container}>
+          <Form
+            ref = {form_data}
+            type = {reg_form}
+            options = {options}
+          />
+          <Button
+            color= "#3D8BCD"
+            title = "Register"
+            onPress = {reg_proc }/>
 
-                <Button
-                    title = "Log in instead"
-                    onPress = {() => navigation.navigate('Login')}/>
-            </KeyboardAvoidingView>
+          <Text style={styles.cta}> Already have an account? Tap below to Login instead </Text>
+
+          <Button
+            color="#DB524C"
+            title = "Log in instead"
+            onPress = {() => navigation.navigate('Login')}/>
+
+            <Image 
+              style={styles.tinyLogo}
+              source={require('../images/Logo_Black.png')}
+            />
+      </KeyboardAvoidingView>
     )
 }
 
@@ -97,9 +109,15 @@ export function RegisterScreen({navigation, form}){
 const styles = StyleSheet.create({
 	container: {
 		justifyContent: 'center',
-		marginTop: 50,
 		padding: 20,
 		backgroundColor: '#fff',
 	},
-
+  cta: {
+    textAlign: "center",
+    padding: 10,
+  },
+  tinyLogo: {
+    width: screenWidth-65,
+    marginTop: 80,
+  },
 });

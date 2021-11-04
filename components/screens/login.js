@@ -1,4 +1,4 @@
-import { StyleSheet, Button, Alert, KeyboardAvoidingView, Dimensions, Text } from 'react-native';
+import { StyleSheet, Button, Alert, KeyboardAvoidingView, Dimensions, Text, Image, Async } from 'react-native';
 import React, { useContext, useState, useRef} from 'react';
 import t from 'tcomb-form-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,6 +18,7 @@ const login_form = t.struct({
     password: t.String
 })
 
+//screen dimensions
 const screenWidth = Math.round(Dimensions.get('screen').width);
 const screenHeight = Math.round(Dimensions.get('screen').height);
 
@@ -80,19 +81,29 @@ export function LoginScreen({navigation, form}){
 
     return(
         <KeyboardAvoidingView style = {styles.container}>
-            <Text> Log In </Text>
+                        
             <Form
                 ref = {form_data}
                 type = {login_form}
                 options = {options}
             />
             <Button
+                color= "#3D8BCD"
                 title = "Log In"
                 onPress = {login_proc }/>
+
+            <Text style={styles.cta}> Don't have an account yet? Tap below to register </Text>
                 
             <Button
+                color="#DB524C"
                 title = "Sign Up"
                 onPress = {() => navigation.navigate('Register')}/>
+
+            <Image 
+                style={styles.tinyLogo}
+                source={require('../images/Logo_Black.png')}
+            />
+            
         </KeyboardAvoidingView>
     )
 }
@@ -100,9 +111,17 @@ export function LoginScreen({navigation, form}){
 const styles = StyleSheet.create({
 	container: {
 		justifyContent: 'center',
-		marginTop: 50,
 		padding: 20,
 		width: screenWidth - 25,
 	},
+
+    cta: {
+        textAlign: "center",
+        padding: 10,
+    },
+    tinyLogo: {
+        width: screenWidth-65,
+        marginTop: 150,
+    }
 
 });

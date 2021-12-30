@@ -1,15 +1,17 @@
 import Aro from './api.js';
-let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
-// let aro = new Aro("https://dc74-102-68-77-130.ngrok.io", {});
+
+//let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
+let aro = new Aro("https://d4c2-102-68-77-130.ngrok.io", {});
+
 
 export default class Calls{
     //private vars.
     #login_url = "/api/v1/auth";
     #sign_up_url = "/users";
     #logout_url = "/users/sign_out";
-    #get_all_policies = "/api/v1/policies";
+    #all_policies_url = '/api/v1/policies';
     #headers = {
-        authorization: null
+        Authorization: null
     }
 
     /** User Login / Logout / Sign Up */
@@ -41,8 +43,7 @@ export default class Calls{
         }
     }
 
-    async sign_up(data){
-               
+    async sign_up(data){               
         try{
             let response = await aro.post(this.#sign_up_url, {}, data);
             console.log(response);
@@ -77,25 +78,12 @@ export default class Calls{
         }
     }
 
-    //LoveActions && User Love actions
-    async getLoveActions(){
-      try{
-        let response = await aro.get(this.#love_actions_url, this.#headers);
-        if (response.status != 200 || response.status != 304){
-          throw new Error(response);
-        }
-        return{
-            data: response.data.data
-        }
-      } catch(e){
-        let status_code = e.response.status;
-        console.log("Status Code: ", status_code);
-        console.log(e.message);
-        return {
-            status: "failure",
-            status_code: e.response.status
-        };
-      }
+    //Get policies
+    async getPolicies(token){
+        this.#headers.Authorization = token;
+        let response = await aro.get(this.#all_policies_url);
+	console.log("RESPONSE FROM CALL :: ", response);
+        return response
     }
 
 
@@ -114,7 +102,7 @@ export default class Calls{
         }
     }
 
-    async get( url){
+    async get(url){
         let response = await aro.get(url, this.#headers);
         if (response.statusText == 'OK'){
             this.update_headers(response);
@@ -145,13 +133,13 @@ export default class Calls{
     }
 
     update_headers(response){
-        this.#headers.authorization = response['token'];
+        this.#headers.Authorization = response['token'];
     }
 
 
-    async get_headers(){
+    get_headers(){
         return {
-            auth: this.#headers.authorization,
+            auth: this.#headers.Authorization,
         }
     }
 

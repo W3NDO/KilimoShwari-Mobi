@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { LoginScreen ,
-        LoginProc } from './components/screens/login';
+import { LoginScreen } from './components/screens/login';
 import { RegisterScreen,
         RegisterProc } from './components/screens/register';
 import { HomeScreen } from './components/screens/home';
@@ -13,8 +12,9 @@ import AuthContext from './components/authProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ViewPolicyScreen } from './components/screens/view_policy';
 import { BuyPolicyScreen } from './components/screens/buy_policy';
+import Calls from './components/services/data';
 
-
+const call = new Calls;
 const AuthStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -33,6 +33,62 @@ const PolicyStackScreen = () => (
     <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
   </PolicyStack.Navigator>
 );
+
+const LoginProc = async val => {
+  try{
+      let res = await call.login(val);
+      if (!res){
+          throw new Error(res)
+      }
+      switch(res.status_code){
+        case 200:
+            let authToken = res.data.token;
+            AsyncStorage.setItem("authToken", String(authToken));
+            AsyncStorage.setItem("email", val.email)
+            console.log('mail', val.email);
+            return true, authToken;
+        case 401:
+            Alert.alert("Log in Failure");
+            console.log("Wrong Password & email combo");
+            return false;
+        default:
+            Alert.alert("There seems to be an error. Error Code: ", res.status_code);
+            return false;
+      }
+  } catch (e){
+      Alert.alert(e.message);
+      console.log(e.message);
+  }
+}
+
+const getAllPolicies = async token => {
+  let _policies = null;
+  console.log("headers : ", call.get_headers())
+  try{
+    let res = await call.getPolicies(token);
+    console.log(res)
+    if (!res){
+      throw new Error(res)
+    } else {
+      switch(res.status_code){
+        case 200:
+            _policies= res.data.policies;
+            AsyncStorage.setItem("Policies", JSON.parse(_policies));
+            console.log('policies', _policies);
+            return true, _policies;
+        case 401:
+            Alert.alert("Unauthorized");
+            console.log("Un-auth: Getting policies");
+            return false;
+        default:
+            Alert.alert("There seems to be an error.");
+            return false;
+      }
+    }
+  } catch (e) {
+    console.log("Failed to get all policies", e)
+  }
+}
 
 
 export default function App() {
@@ -99,16 +155,19 @@ export default function App() {
           let res = await LoginProc(data)
           console.log('Res', res);
           res[0] ? authToken = res[1] : authToken = null;
+          
         } catch (e){
           console.log(e)
         }
         let _email = await AsyncStorage.getItem('email');
         dispatch({ type: 'SIGN_IN', token: authToken , email: _email });
       },
+
       signOut: () => {
         signOutProc();
         dispatch({ type: 'SIGN_OUT' })
       },
+
       signUp: async data => {
         let authToken;
         try{
@@ -118,12 +177,24 @@ export default function App() {
         }
         dispatch({ type: 'SIGN_IN', token: authToken  });
       },
+
+      getAllPolicies: async token => {
+        let _policies;
+        try {
+          let res = await getAllPolicies(token);
+          _policies = res[1]
+          return _policies;
+        } catch (e) { 
+          console.log( "Failed to get policies: ", e)
+        }
+      }
     }),
     []
   );
   return (
     <AuthContext.Provider value={contextValue}>
       <NavigationContainer>
+        {state.userToken ? call.update_headers({"token": state.userToken}) : null}
         {state.userToken==null? 
           (
           <AuthStack.Navigator>

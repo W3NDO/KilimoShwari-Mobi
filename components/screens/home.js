@@ -1,8 +1,10 @@
 import { StyleSheet, Button, FlatList, View, Dimensions, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import React, { useContext, useState, useRef} from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 
 //import sample data
 import { policies } from '../temp_data/policies';
+import AuthContext from '../authProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //screen dimensions
 const screenWidth = Math.round(Dimensions.get('screen').width);
@@ -47,12 +49,24 @@ function renderItem({ item, navigation }){
 
 
 export function HomeScreen(){
+    const { getAllPolicies } = useContext(AuthContext);
 
+    const [policies, setPolicies] = useState([]);
+    useEffect (async ()=>{
+        AsyncStorage.getItem('AuthToken').then (res => {
+            console.log("Response :", res)
+            if (res){
+                throw new Error(res)
+            } else {
+                setPolicies(getAllPolicies(res))
+            }
+        })        
+    }, [])
     return (
     <SafeAreaView>
         <Text style={styles.title}> My Policies </Text>
         <FlatList
-        data={DATA}
+        data={policies}
         renderItem={renderItem}
         keyExtractor={item => item.alias}
         />

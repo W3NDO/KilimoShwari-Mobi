@@ -1,15 +1,13 @@
 import Aro from './api.js';
-let aro = new Aro("https://love-on-fire.herokuapp.com", {});
-// let aro = new Aro("https://dc74-102-68-77-130.ngrok.io", {});
+// let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
+let aro = new Aro(" https://dcfd-102-68-77-130.ngrok.io", {});
 
 export default class Calls{
     //private vars.
     #login_url = "/api/v1/auth";
     #sign_up_url = "/users";
     #logout_url = "/users/sign_out";
-    #love_actions_url = "/api/v1/love_actions"
-    #user_love_actions_url = "/api/v1/user_love_actions"
-    #love_tanks = "api/v1/love_tanks"  //may need to be augmented to also take an ID param
+    #all_policies_url = '/api/v1/policies';
     #headers = {
         authorization: null
     }
@@ -79,25 +77,11 @@ export default class Calls{
         }
     }
 
-    //LoveActions && User Love actions
-    async getLoveActions(){
-      try{
-        let response = await aro.get(this.#love_actions_url, this.#headers);
-        if (response.status != 200 || response.status != 304){
-          throw new Error(response);
-        }
-        return{
-            data: response.data.data
-        }
-      } catch(e){
-        let status_code = e.response.status;
-        console.log("Status Code: ", status_code);
-        console.log(e.message);
-        return {
-            status: "failure",
-            status_code: e.response.status
-        };
-      }
+    //Get policies
+    async getPolicies(token){
+        this.#headers.authorization = token;
+        let response = await aro.get(this.#all_policies_url)
+        return response
     }
 
 
@@ -151,7 +135,7 @@ export default class Calls{
     }
 
 
-    async get_headers(){
+    get_headers(){
         return {
             auth: this.#headers.authorization,
         }

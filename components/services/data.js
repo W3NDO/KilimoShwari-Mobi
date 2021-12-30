@@ -1,5 +1,5 @@
 import Aro from './api.js';
-let aro = new Aro("https://love-on-fire.herokuapp.com", {});
+let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
 // let aro = new Aro("https://dc74-102-68-77-130.ngrok.io", {});
 
 export default class Calls{
@@ -7,9 +7,7 @@ export default class Calls{
     #login_url = "/api/v1/auth";
     #sign_up_url = "/users";
     #logout_url = "/users/sign_out";
-    #love_actions_url = "/api/v1/love_actions"
-    #user_love_actions_url = "/api/v1/user_love_actions"
-    #love_tanks = "api/v1/love_tanks"  //may need to be augmented to also take an ID param
+    #get_all_policies = "/api/v1/policies";
     #headers = {
         authorization: null
     }

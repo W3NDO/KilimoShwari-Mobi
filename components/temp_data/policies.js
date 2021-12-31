@@ -8,7 +8,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
             {   
                 "alias": "Rongai farm 2",
@@ -17,7 +17,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
             {   
                 "alias": "Rongai farm 3",
@@ -26,7 +26,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
             {   
                 "alias": "Rongai farm 4",
@@ -35,7 +35,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
             {   
                 "alias": "Rongai farm 5",
@@ -44,7 +44,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
             {   
                 "alias": "Rongai farm 6",
@@ -53,7 +53,7 @@ export function policies(){
                 "end_date": 1607102972,
                 "Location": "Memusi",
                 "Coords": "-1.381,36.68",
-                "Contract_Address": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+                "block_Hash": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
             },
         ]
     )

@@ -1,8 +1,6 @@
 import { StyleSheet, Button, FlatList, View, Dimensions, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import React, { useContext, useState, useEffect} from 'react';
 
-//import sample data
-import { policies } from '../temp_data/policies';
 import AuthContext from '../authProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,14 +11,6 @@ const screenHeight = Math.round(Dimensions.get('screen').height);
 //get all the policies of a particular user
 //display all policies of that user
 //sort by date? 
-
-function getPolicies(){
-    let policy_list = policies()
-
-    return policy_list
-}
-
-const DATA = policies();
 
 const view = ({navigation}) => {  //call the view policy screen for a that specific policy
     try{
@@ -40,8 +30,8 @@ function renderItem({ item, navigation }){
     let d = new Date(0)
     return(
         <Item 
-            title={item.alias + " : " + item.Maize_variety}
-            onPress={() => {navigation.navigate("View Policy")}}
+            title={item.id + " : " + item.location + " : " + item.maize_variety }
+            // onPress={() => {navigation.navigate("View Policy")}}
         />
     );
 }
@@ -53,22 +43,22 @@ export function HomeScreen(){
 
     const [policies, setPolicies] = useState([]);
     useEffect (async ()=>{
-        AsyncStorage.getItem('AuthToken').then (res => {
-            console.log("Response :", res)
-            if (res){
-                throw new Error(res)
-            } else {
-                setPolicies(getAllPolicies(res))
-            }
-        })        
+        res = getAllPolicies()
+        num_of_policies = await AsyncStorage.getItem("Policies Total Count")
+        console.log(num_of_policies)
+        for (let i =0; i < num_of_policies; i++){
+            temp = await AsyncStorage.getItem(i.toString())
+            setPolicies([...policies, JSON.parse(temp)])
+        }      
     }, [])
+    console.log("POPO :", policies)
     return (
     <SafeAreaView>
-        <Text style={styles.title}> My Policies </Text>
+        <Text style={styles.title}> My_Policies </Text>
         <FlatList
         data={policies}
         renderItem={renderItem}
-        keyExtractor={item => item.alias}
+        keyExtractor={item => item.id}
         />
     </SafeAreaView>
     );

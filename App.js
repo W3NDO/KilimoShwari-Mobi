@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import { LoginScreen } from './components/screens/login';
 import { RegisterScreen,
         RegisterProc } from './components/screens/register';
@@ -61,21 +61,20 @@ const LoginProc = async val => {
   }
 }
 
-const getAllPolicies = async token => {
+const getAllPolicies = async () => {
   let _policies = null;
-  console.log("hELLO");
-  console.log("headers : ", call.get_headers())
   try{
-    let res = await call.getPolicies(token);
-    console.log(res)
+    let res = await call.getPolicies();
     if (!res){
       throw new Error(res)
     } else {
       switch(res.status_code){
         case 200:
-            _policies= res.data.policies;
-            AsyncStorage.setItem("Policies", JSON.parse(_policies));
-            console.log('policies', _policies);
+            _policies= res.data.data.policies;
+            for (let i=0; i < _policies.length; i++){
+              AsyncStorage.setItem(i.toString(), JSON.stringify(_policies[i]));
+            }
+            AsyncStorage.setItem("Policies Total Count", _policies.length.toString())
             return true, _policies;
         case 401:
             Alert.alert("Unauthorized");
@@ -88,6 +87,7 @@ const getAllPolicies = async token => {
     }
   } catch (e) {
     console.log("Failed to get all policies", e)
+    return false;
   }
 }
 

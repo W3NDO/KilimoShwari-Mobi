@@ -18,13 +18,12 @@ export default class Calls{
     async login(data){
         try{
             let response = await aro.post(this.#login_url, {}, data);
-            //console.log(response);
-            this.update_headers(response);
             
             if (response.status !== 200){
                 Alert.alert("Oopsie Woopsie UwU");
                 throw new Error(response)
             }
+            this.update_headers(response.data);
             return {
                 status: "success",
                 status_code: response.status,
@@ -32,7 +31,7 @@ export default class Calls{
             };
 
         } catch(e){
-            //console.log(e);
+            console.error(e);
             let status_code = e.response.status;
             console.log("Status Code: ", status_code);
             console.log(e.message);
@@ -59,7 +58,7 @@ export default class Calls{
             };
 
         } catch(e){
-            console.log(e);
+            console.error(e);
             let status_code = e.response.status;
             console.log("Status Code: ", status_code);
             console.log(e.message);
@@ -76,14 +75,6 @@ export default class Calls{
             status: response.status,
             data: response.data
         }
-    }
-
-    //Get policies
-    async getPolicies(token){
-        this.#headers.Authorization = token;
-        let response = await aro.get(this.#all_policies_url);
-	console.log("RESPONSE FROM CALL :: ", response);
-        return response
     }
 
 
@@ -104,17 +95,23 @@ export default class Calls{
 
     async get(url){
         let response = await aro.get(url, this.#headers);
-        if (response.statusText == 'OK'){
+        if (response.status == 200){
             this.update_headers(response);
             return {
-                status: response.status,
+                status: "success",
+                status_code: response.status,
                 data: response.data
-            }
+            };
         } else {
             return {
                 status: response.status
             }
         }
+    }
+
+    async getPolicies(){
+        res = await this.get(this.#all_policies_url);
+        return res
     }
 
     async put(data, url){
@@ -138,9 +135,7 @@ export default class Calls{
 
 
     get_headers(){
-        return {
-            auth: this.#headers.Authorization,
-        }
+        return this.#headers
     }
 
 }
@@ -153,4 +148,3 @@ export default class Calls{
 // let call = new Calls();
 // let res = await call.login(data);
 // console.log(res);
-

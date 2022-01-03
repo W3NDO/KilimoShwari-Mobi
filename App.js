@@ -205,12 +205,16 @@ export default function App() {
         ): (
           <Tabs.Navigator
           screenOptions={({ route }) => ({
-            tabBarActiveTintColor: '#006600',
+            tabBarActiveTintColor: '#008700',
             tabBarInactiveTintColor: 'gray',
           })}
           >
             <Tabs.Screen name='Home' component={HomeScreen} />
-            <Tabs.Screen name='Policy' component={PolicyStackScreen} />
+            <Tabs.Screen 
+              name='Policy' 
+              component={PolicyStackScreen} 
+              options={{ headerShown: false }}
+            />
           </Tabs.Navigator>
         )}
       </NavigationContainer>

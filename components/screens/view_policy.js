@@ -3,11 +3,12 @@ import React, { useContext, useState, useRef} from 'react';
 import Calls from '../services/data';
 import AuthContext from '../authProvider';
 
-export function ViewPolicyScreen(){
+export function ViewPolicyScreen({navigation}){
     const { getAllPolicies } = useContext(AuthContext);
     return(
         <KeyboardAvoidingView>
             <Text> View Policy Screen </Text>
+            
         </KeyboardAvoidingView>
     );
 }

@@ -34,6 +34,7 @@ const PolicyStackScreen = () => (
   </PolicyStack.Navigator>
 );
 
+console.log(call.get_headers())
 const LoginProc = async val => {
   try{
       let res = await call.login(val);
@@ -237,6 +238,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={contextValue}>
       <NavigationContainer>
+        {console.log(state.userToken, call.get_headers())}
         {state.userToken ? call.update_headers({"token": state.userToken}) : null}
         {state.userToken==null?
           (

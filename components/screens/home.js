@@ -43,11 +43,12 @@ export function HomeScreen({navigation}){
 
     const [policies, setPolicies] = useState([]);
     let [refreshCounter, setRefreshCounter] = useState(0)
-    useEffect (async ()=>{
+    const _getPolicies = useEffect (async ()=>{
+        setPolicies([])
         res = getAllPolicies()
         num_of_policies = await AsyncStorage.getItem("Policies Total Count")
         for (let i =0; i < num_of_policies; i++){
-            temp = await AsyncStorage.getItem(i.toString())
+            let temp = await AsyncStorage.getItem(i.toString())
             setPolicies(policies => [...policies, (JSON.parse(temp))])
         }
     }, [])
@@ -56,7 +57,10 @@ export function HomeScreen({navigation}){
         <Text style={styles.title}> My_Policies </Text>
         <Button 
             title='Refresh'
-            onPress={ () => {setRefreshCounter( refreshCounter += 1)} }
+            onPress={ () => {
+                setRefreshCounter(refreshCounter += 1)
+                _getPolicies
+            }}
         />
         {console.log(policies.length)}
         <FlatList

@@ -20,7 +20,6 @@ export default class Calls{
             let response = await aro.post(this.#login_url, {}, data);
             
             if (response.status !== 200){
-                Alert.alert("Oopsie Woopsie UwU");
                 throw new Error(response)
             }
             this.update_headers(response.data);

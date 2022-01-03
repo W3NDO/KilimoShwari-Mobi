@@ -29,8 +29,8 @@ const HomeStackScreen = () => (
 
 const PolicyStackScreen = () => (
   <PolicyStack.Navigator>
-    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
     <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
+    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
   </PolicyStack.Navigator>
 );
 
@@ -156,7 +156,7 @@ export default function App() {
           let res = await LoginProc(data)
           console.log('Res', res);
           res[0] ? authToken = res[1] : authToken = null;
-          
+
         } catch (e){
           console.log(e)
         }
@@ -185,7 +185,7 @@ export default function App() {
           let res = await getAllPolicies(token);
           _policies = res[1]
           return _policies;
-        } catch (e) { 
+        } catch (e) {
           console.log( "Failed to get policies: ", e)
         }
       }
@@ -196,7 +196,7 @@ export default function App() {
     <AuthContext.Provider value={contextValue}>
       <NavigationContainer>
         {state.userToken ? call.update_headers({"token": state.userToken}) : null}
-        {state.userToken==null? 
+        {state.userToken==null?
           (
           <AuthStack.Navigator>
             <AuthStack.Screen name='Login' component={LoginScreen} />
@@ -210,7 +210,11 @@ export default function App() {
           })}
           >
             <Tabs.Screen name='Home' component={HomeScreen} />
-            <Tabs.Screen name='Policy' component={PolicyStackScreen} />
+            <Tabs.Screen
+		name='Policy'
+	   	options = {{headerShown : false}}
+		component={PolicyStackScreen}
+	    />
           </Tabs.Navigator>
         )}
       </NavigationContainer>

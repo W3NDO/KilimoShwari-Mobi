@@ -4804,6 +4804,11 @@
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
 
+"react-native-form@^2.1.3":
+  "integrity" "sha512-33XZ4tX9SEPDcd8jz0/D0IHUpn3oGPW3gtHB294SK3Bvi0XpSNRKMjydbmoO4tpNHVMnZKtCXrr0VAURn/kGXQ=="
+  "resolved" "https://registry.npmjs.org/react-native-form/-/react-native-form-2.1.3.tgz"
+  "version" "2.1.3"
+
 "react-native-gesture-handler@*", "react-native-gesture-handler@>= 1.0.0", "react-native-gesture-handler@~1.10.2":
   "integrity" "sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz"

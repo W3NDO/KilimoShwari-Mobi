@@ -81,7 +81,7 @@ export function LoginScreen({navigation, form}){
 
     return(
         <KeyboardAvoidingView style = {styles.container}>
-                        
+
             <Form
                 ref = {form_data}
                 type = {login_form}
@@ -93,17 +93,17 @@ export function LoginScreen({navigation, form}){
                 onPress = {login_proc }/>
 
             <Text style={styles.cta}> Don't have an account yet? Tap below to register </Text>
-                
+
             <Button
                 color="#DB524C"
                 title = "Sign Up"
                 onPress = {() => navigation.navigate('Register')}/>
 
-            <Image 
+            <Image
                 style={styles.tinyLogo}
                 source={require('../images/Logo_Black.png')}
             />
-            
+
         </KeyboardAvoidingView>
     )
 }

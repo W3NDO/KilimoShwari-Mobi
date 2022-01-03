@@ -10,7 +10,7 @@ const screenHeight = Math.round(Dimensions.get('screen').height);
 
 //get all the policies of a particular user
 //display all policies of that user
-//sort by date? 
+//sort by date?
 
 const view = ({navigation}) => {  //call the view policy screen for a that specific policy
     try{
@@ -29,16 +29,16 @@ const Item = ({ title, onPress}) => (
 function renderItem({ item, navigation }){
     let d = new Date(0)
     return(
-        <Item 
+        <Item
             title={item.id + " : " + item.location + " : " + item.maize_variety }
             // onPress={() => {navigation.navigate("View Policy")}}
         />
     );
 }
-    
 
 
-export function HomeScreen(){
+
+export function HomeScreen({navigation}){
     const { getAllPolicies } = useContext(AuthContext);
 
     const [policies, setPolicies] = useState([]);
@@ -49,7 +49,7 @@ export function HomeScreen(){
         for (let i =0; i < num_of_policies; i++){
             temp = await AsyncStorage.getItem(i.toString())
             setPolicies([...policies, JSON.parse(temp)])
-        }      
+        }
     }, [])
     console.log("POPO :", policies)
     return (
@@ -60,6 +60,14 @@ export function HomeScreen(){
         renderItem={renderItem}
         keyExtractor={item => item.id}
         />
+	<Button
+		title="Buy Policy"
+		onPress={() =>
+			{
+			  navigation.navigate('Policy')	
+			}
+		}
+	/>
     </SafeAreaView>
     );
 }

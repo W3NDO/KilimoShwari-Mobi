@@ -1,7 +1,7 @@
 import Aro from './api.js';
 
 //let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
-let aro = new Aro("https://d4c2-102-68-77-130.ngrok.io", {});
+let aro = new Aro("https://e6a2-102-68-77-130.ngrok.io", {});
 
 
 export default class Calls{
@@ -80,12 +80,12 @@ export default class Calls{
 
     async post(data, url){
         let response = await aro.post(url, this.#headers, data );
-        if (response.statusText == 'OK'){
-            this.update_headers(response);
+        if (response.status == 200){
             return {
-                status: response.status,
+                status: "success",
+                status_code: response.status,
                 data: response.data
-            }
+            };
         } else {
             return {
                 status: response.status
@@ -96,7 +96,6 @@ export default class Calls{
     async get(url){
         let response = await aro.get(url, this.#headers);
         if (response.status == 200){
-            this.update_headers(response);
             return {
                 status: "success",
                 status_code: response.status,
@@ -111,6 +110,13 @@ export default class Calls{
 
     async getPolicies(){
         res = await this.get(this.#all_policies_url);
+        return res
+    }
+
+    async buyPolicy(data){
+        console.log(this.#headers.Authorization)
+        res = await this.post(data, this.#all_policies_url)
+        console.log(res)
         return res
     }
 

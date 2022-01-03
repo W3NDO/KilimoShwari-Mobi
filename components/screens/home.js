@@ -8,10 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const screenWidth = Math.round(Dimensions.get('screen').width);
 const screenHeight = Math.round(Dimensions.get('screen').height);
 
-//get all the policies of a particular user
-//display all policies of that user
-//sort by date? 
-
 const view = ({navigation}) => {  //call the view policy screen for a that specific policy
     try{
         navigation.navigate("Policy")
@@ -29,8 +25,8 @@ const Item = ({ title, onPress}) => (
 function renderItem({ item, navigation }){
     let d = new Date(0)
     return(
-        <Item 
-            title={item.id + " : " + item.location + " : " + item.maize_variety }
+        <Item
+            title={item.id + " : " + item.location + " Farm: " + item.maize_variety }
             // onPress={
             //     () => {
             //         // navigation.navigate("View Policy")
@@ -40,7 +36,6 @@ function renderItem({ item, navigation }){
         />
     );
 }
-    
 
 
 export function HomeScreen({navigation}){
@@ -53,10 +48,9 @@ export function HomeScreen({navigation}){
         num_of_policies = await AsyncStorage.getItem("Policies Total Count")
         for (let i =0; i < num_of_policies; i++){
             temp = await AsyncStorage.getItem(i.toString())
-            setPolicies([...policies, JSON.parse(temp)])
-            
-        }      
-    }, [refreshCounter])
+            setPolicies(policies => [...policies, (JSON.parse(temp))])
+        }
+    }, [])
     return (
     <SafeAreaView>
         <Text style={styles.title}> My_Policies </Text>
@@ -64,15 +58,20 @@ export function HomeScreen({navigation}){
             title='Refresh'
             onPress={ () => {setRefreshCounter( refreshCounter += 1)} }
         />
+        {console.log(policies.length)}
         <FlatList
         data={policies}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         />
-        <Button 
-                title = "Buy New Policy"
-                onPress={ () => navigation.navigate('New Policy')}
-            />
+	<Button
+		title="Buy Policy"
+		onPress={() =>
+			{
+			  navigation.navigate('Policy')	
+			}
+		}
+	/>
     </SafeAreaView>
     );
 }

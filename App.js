@@ -29,8 +29,8 @@ const HomeStackScreen = () => (
 
 const PolicyStackScreen = () => (
   <PolicyStack.Navigator>
-    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
     <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
+    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
   </PolicyStack.Navigator>
 );
 
@@ -88,6 +88,32 @@ const getAllPolicies = async () => {
   } catch (e) {
     console.log("Failed to get all policies", e)
     return false;
+  }
+}
+
+const BuyPolicy = async data => {
+  try{
+    let res = await call.buyPolicy(data)
+    if (!res){
+      throw new Error(res)
+    } else {
+      switch(res.status_code){
+        case 200:
+            _policies= res.data.data.policies;
+            _blockhash = res.data.data[0].blockHash
+            _policy_id = res.data.data[1].id
+            return true, _blockhash, _policy_id;
+        case 401:
+            Alert.alert("Unauthorized");
+            console.log("Un-auth: Getting policies");
+            return false;
+        default:
+            Alert.alert("There seems to be an error.");
+            return false;
+      }
+    }
+  } catch(e){
+    console.log(e)
   }
 }
 
@@ -156,7 +182,7 @@ export default function App() {
           let res = await LoginProc(data)
           console.log('Res', res);
           res[0] ? authToken = res[1] : authToken = null;
-          
+
         } catch (e){
           console.log(e)
         }
@@ -185,18 +211,34 @@ export default function App() {
           let res = await getAllPolicies(token);
           _policies = res[1]
           return _policies;
-        } catch (e) { 
+        } catch (e) {
           console.log( "Failed to get policies: ", e)
+        }
+      },
+
+      buyPolicy: async data => {
+        let _bought;
+        try{
+          let res = await BuyPolicy(data);
+          if (res[0]){
+            _bought = res[0];
+            return res[1], res[2]
+          } else {
+            _bought = res[0]
+          }
+        } catch (e){
+          console.error("Couldn't buy the policy ", e)
         }
       }
     }),
     []
   );
+
   return (
     <AuthContext.Provider value={contextValue}>
       <NavigationContainer>
         {state.userToken ? call.update_headers({"token": state.userToken}) : null}
-        {state.userToken==null? 
+        {state.userToken==null?
           (
           <AuthStack.Navigator>
             <AuthStack.Screen name='Login' component={LoginScreen} />
@@ -204,17 +246,17 @@ export default function App() {
           </AuthStack.Navigator>
         ): (
           <Tabs.Navigator
-          screenOptions={({ route }) => ({
-            tabBarActiveTintColor: '#008700',
-            tabBarInactiveTintColor: 'gray',
-          })}
+            screenOptions={({ route }) => ({
+              tabBarActiveTintColor: '#008700',
+              tabBarInactiveTintColor: 'gray',
+            })}
           >
-            <Tabs.Screen name='Home' component={HomeScreen} />
-            <Tabs.Screen 
-              name='Policy' 
-              component={PolicyStackScreen} 
-              options={{ headerShown: false }}
-            />
+            <Tabs.Screen name='Home' component={HomeScreen}/>
+            <Tabs.Screen
+              name='Policy'
+              options = {{headerShown : false}}
+              component={PolicyStackScreen}
+              />
           </Tabs.Navigator>
         )}
       </NavigationContainer>

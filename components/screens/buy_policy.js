@@ -1,4 +1,4 @@
-import {Button, SafeAreaView, StyleSheet, TextInput, Dimensions, Text, TouchableOpacity, Alert } from 'react-native';
+import {Pressable, SafeAreaView, StyleSheet, TextInput, Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useState, useRef} from 'react';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -47,10 +47,10 @@ export function BuyPolicyScreen(){
   }
     
   return (
-      <SafeAreaView>
-        <Text>Buy Policy</Text>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Location</Text>
         <TextInput 
-          style={styles.date}
+          style={styles.location}
           placeholder='Enter Your location'
           onChangeText={setLocation}
           value={location}
@@ -94,13 +94,19 @@ export function BuyPolicyScreen(){
             setOpenEndModal(false)
           }}
         />
-        <Button
-          title="Locate Farm"
-          onPress={ () => {
-            locateMe()
-          }}
-        />
+
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={styles.locateButton}
+            onPress={ () => {
+              locateMe()
+            }}
+          >
+            <Text> Locate Farm</Text>
+          </Pressable>
+        </View>
         <DropDownPicker
+          style={styles.picker}
           open={openPicker}
           value={maizeVariety}
           items={varietyTypes}
@@ -109,26 +115,29 @@ export function BuyPolicyScreen(){
           setItems={setVarietyTypes}
           placeholder="Select Maize Variety"
         />
-
-        <Button 
-          title = "Buy Policy"
-          onPress = {async () =>{
-            if (location && coordinates && startDate && endDate && maizeVariety){
-              console.log("Policy being bought:: ", location, coordinates, Date.parse(startDate), Date.parse(endDate), maizeVariety)
-              let _policy_data = {
-                "location": location,
-                "maize_variety": maizeVariety,
-                "start_date": Date.parse(startDate),
-                "end_date": Date.parse(endDate)
+        <View style={styles.buttonContainer}> 
+          <Pressable 
+            style={styles.buyButton}
+            onPress = {async () =>{
+              if (location && coordinates && startDate && endDate && maizeVariety){
+                console.log("Policy being bought:: ", location, coordinates, Date.parse(startDate), Date.parse(endDate), maizeVariety)
+                let _policy_data = {
+                  "location": location,
+                  "maize_variety": maizeVariety,
+                  "start_date": Date.parse(startDate),
+                  "end_date": Date.parse(endDate)
+                }
+                let res = await _buyPolicy(_policy_data)
+                console.log("policy purchase response", res)
+                
+              } else {
+                console.error("Field Missing")
               }
-              let res = await _buyPolicy(_policy_data)
-              console.log("policy purchase response", res)
-              
-            } else {
-              console.error("Field Missing")
-            }
-          }}
-        />
+            }}
+          >
+            <Text>Buy Policy</Text>
+          </Pressable>
+        </View>
         
       </SafeAreaView>
     );
@@ -137,8 +146,12 @@ export function BuyPolicyScreen(){
 
 const styles = StyleSheet.create({
   title: {
-      fontSize: 20,
-      textAlign: "center",
+    paddingBottom: 0,
+    paddingTop: 20,
+    color: "#222222",
+    width: screenWidth,
+    paddingLeft: 20,
+    fontSize: 14,
 
   },
   date: {
@@ -146,8 +159,59 @@ const styles = StyleSheet.create({
       color: "#222222",
       borderBottomColor: "#cccccc",
       borderBottomWidth: 1,
-      width: screenWidth,
+      width: screenWidth - 20,
+      marginLeft: 10,
+      marginRight: 10, 
       paddingLeft: 20,
       fontSize: 18,
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },  
+  location: {
+    borderColor: "#222222",
+    borderWidth: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 5,
+    padding: 10,
+  },
+  picker: {
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    width: screenWidth -20,
+  },
+  locateButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    width: (screenWidth/2) -20,
+    marginLeft: 10,
+    backgroundColor: '#008700',
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  buyButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    width: (screenWidth/2) -20,
+    marginLeft: 10,
+    backgroundColor: '#008700',
+    position: "relative",
+    marginTop: 100,
+    bottom: 0,
+  },
+  container: {
+    height: screenHeight,
   }
 });

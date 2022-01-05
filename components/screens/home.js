@@ -1,4 +1,4 @@
-import { StyleSheet, Button, FlatList, View, Dimensions, Text, SafeAreaView, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Button, Pressable, FlatList, View, Dimensions, Text, SafeAreaView, TouchableOpacity, Alert} from 'react-native';
 import React, { useContext, useState, useEffect} from 'react';
 
 import AuthContext from '../authProvider';
@@ -54,28 +54,34 @@ export function HomeScreen({navigation}){
     }, [])
     return (
     <SafeAreaView>
-        <Text style={styles.title}> My_Policies </Text>
-        <Button 
-            title='Refresh'
-            onPress={ () => {
-                setRefreshCounter(refreshCounter += 1)
-                _getPolicies
-            }}
-        />
-        {console.log(policies.length)}
+        <View style={styles.buttons}>
+            <Pressable 
+                onPress={ () => {
+                    setRefreshCounter(refreshCounter += 1)
+                    _getPolicies
+                }}
+                style={styles.buttonLeft}
+            >
+                <Text style={styles.text}>Refresh</Text>
+            </Pressable>
+            <Pressable
+                title="Buy Policy"
+                onPress={() =>
+                    {
+                    navigation.navigate('Policy')	
+                    }
+                }
+                style={styles.buttonRight}
+            >
+                <Text style={styles.text}>Buy Policy</Text>
+            </Pressable>
+        </View>
         <FlatList
-        data={policies}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
+            data={policies}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            style={styles.policies}
         />
-	<Button
-		title="Buy Policy"
-		onPress={() =>
-			{
-			  navigation.navigate('Policy')	
-			}
-		}
-	/>
     </SafeAreaView>
     );
 }
@@ -91,8 +97,44 @@ const styles = StyleSheet.create({
         color: "#222222",
         borderBottomColor: "#cccccc",
         borderBottomWidth: 1,
-        width: screenWidth,
+        width: screenWidth - 20,
+        marginLeft: 10,
+        marginRight: 10, 
         paddingLeft: 20,
-        fontSize: 18,
+        fontSize: 16,
+    },
+    policies: {
+        paddingBottom: 50
+    },
+    text: {
+        color: "#ffffff"
+    },  
+    buttons: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: screenWidth,
+        justifyContent: 'center'
+    },
+    buttonLeft: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        width: (screenWidth/2)-20,
+        marginLeft: 10,
+        backgroundColor: '#008700'
+    },
+    buttonRight: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        width: (screenWidth/2)-20,
+        marginLeft: 10,
+        backgroundColor: '#008700'
     }
 });

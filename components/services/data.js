@@ -1,7 +1,7 @@
 import Aro from './api.js';
 
 //let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
-let aro = new Aro("https://e6a2-102-68-77-130.ngrok.io", {});
+let aro = new Aro("https://7b62-102-68-77-130.ngrok.io", {});
 
 
 export default class Calls{

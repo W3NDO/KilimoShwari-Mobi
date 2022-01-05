@@ -24,13 +24,13 @@ const PolicyStack = createStackNavigator();
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
     <HomeStack.Screen name='Home' component = {HomeScreen} />
+    <HomeScreen.Screen name='View Policy' component={ViewPolicyScreen} />
   </HomeStack.Navigator>
 );
 
 const PolicyStackScreen = () => (
   <PolicyStack.Navigator>
     <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
-    <PolicyStack.Screen name='View Policy' component={ViewPolicyScreen}/>
   </PolicyStack.Navigator>
 );
 
@@ -223,7 +223,7 @@ export default function App() {
           let res = await BuyPolicy(data);
           if (res[0]){
             _bought = res[0];
-            return res[1], res[2]
+            return res[0], res[1], res[2]
           } else {
             _bought = res[0]
           }

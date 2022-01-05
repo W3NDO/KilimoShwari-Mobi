@@ -76,7 +76,10 @@ export function RegisterScreen({navigation, form}){
     });
     const reg_proc = dets =>{
       const form_val = form_data.current.getValue();
-      signUp(form_val);
+      res = signUp(form_val);
+      if (res){
+        navigation.navigate("Login");
+      }
     }
     return(
       <KeyboardAvoidingView style = {styles.container}>

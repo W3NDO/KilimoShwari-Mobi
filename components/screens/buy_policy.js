@@ -1,4 +1,4 @@
-import {Pressable, SafeAreaView, StyleSheet, TextInput, Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import {Pressable, SafeAreaView, StyleSheet, TextInput, Dimensions, Text, TouchableOpacity, View, Alert } from 'react-native';
 import React, { useContext, useState, useRef} from 'react';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -9,14 +9,14 @@ import AuthContext from '../authProvider';
 const screenWidth = Math.round(Dimensions.get('screen').width);
 const screenHeight = Math.round(Dimensions.get('screen').height);
 
-export function BuyPolicyScreen(){
+export function BuyPolicyScreen({navigation}){
   const { buyPolicy } = useContext(AuthContext); //context
 
   const [location, setLocation] = useState('')
   const [startDate, setStartDate] = useState(new Date)
   const [endDate, setEndDate] = useState(new Date)
   const [maizeVariety, setMaizeVariety] = useState(null)
-  const [coordinates, setCoordinates] = useState([])
+  const [coordinates, setCoordinates] = useState('')
 
   const [varietyTypes, setVarietyTypes] = useState([
     {label: "Hybrid Series 5", value: 'Hybrid Series 5'},
@@ -37,7 +37,8 @@ export function BuyPolicyScreen(){
       timeout: 15000,
     })
     .then(location => {
-      setCoordinates([location["latitude"], location["longitude"]])
+      console.log(location["latitude"].toString() + ',' + location["longitude"].toString())
+      setCoordinates(location["latitude"].toString() + ',' + location["longitude"].toString())
       return coordinates
     })
     .catch(error => {
@@ -119,15 +120,20 @@ export function BuyPolicyScreen(){
           <Pressable 
             style={styles.buyButton}
             onPress = {async () =>{
+              console.log("COORDS: ",coordinates)
               if (location && coordinates && startDate && endDate && maizeVariety){
-                console.log("Policy being bought:: ", location, coordinates, Date.parse(startDate), Date.parse(endDate), maizeVariety)
                 let _policy_data = {
                   "location": location,
                   "maize_variety": maizeVariety,
+                  "coordinates": coordinates,
                   "start_date": Date.parse(startDate),
                   "end_date": Date.parse(endDate)
                 }
                 let res = await _buyPolicy(_policy_data)
+                if (res[0]){
+                  Alert.alert("Successfully purchased a new Policy");
+                  navigation.navigate("Home")
+                }
                 console.log("policy purchase response", res)
                 
               } else {

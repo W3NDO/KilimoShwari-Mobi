@@ -1,7 +1,7 @@
 import Aro from './api.js';
 
-//let aro = new Aro("https://kilimo-shwari.herokuapp.com", {});
-let aro = new Aro("https://7b62-102-68-77-130.ngrok.io", {});
+let aro = new Aro("https://kilimo-shwari-2.herokuapp.com", {});
+// let aro = new Aro("https://ba66-102-68-77-130.ngrok.io", {});
 
 
 export default class Calls{
@@ -9,7 +9,7 @@ export default class Calls{
     #login_url = "/api/v1/auth";
     #sign_up_url = "/users";
     #logout_url = "/users/sign_out";
-    #all_policies_url = '/api/v1/policies';
+    #all_policies_url = '/api/v1/policies'; //GET && POST
     #headers = {
         Authorization: null
     }
@@ -107,8 +107,11 @@ export default class Calls{
         }
     }
 
-    async getPolicies(){
+    async getPolicies(token){
+        // this.#headers.Authorization = token;
+        console.log("Get policies ",this.#headers.Authorization)
         res = await this.get(this.#all_policies_url);
+        console.log(res)
         return res
     }
 
@@ -144,12 +147,3 @@ export default class Calls{
     }
 
 }
-
-
-// let data = {
-//     email: "email@example.com",
-//     password : "foobar123"
-// }
-// let call = new Calls();
-// let res = await call.login(data);
-// console.log(res);

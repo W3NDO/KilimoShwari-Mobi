@@ -22,17 +22,6 @@ const Item = ({ title, func}) => (
     </TouchableOpacity>
   );
 
-// function renderItem({ item, navigation }){
-//     let d = new Date(0)
-//     return(
-//         <Item
-//             title={item.id + " : " + item.location + " Farm: " + item.maize_variety }
-
-//         />
-//     );
-// }
-
-
 export function HomeScreen({navigation}){
     const { getAllPolicies } = useContext(AuthContext);
 
@@ -85,6 +74,7 @@ export function HomeScreen({navigation}){
         for (let i =0; i < num_of_policies; i++){
             let temp = await AsyncStorage.getItem(i.toString())
             setPolicies(policies => [...policies, (JSON.parse(temp))])
+            console.log(policies)
         }
     }, [])
 
@@ -104,7 +94,7 @@ export function HomeScreen({navigation}){
                 title="Buy Policy"
                 onPress={() =>
                     {
-                    navigation.navigate('Policy')	
+                    navigation.navigate('Buy New Policy')	
                     }
                 }
                 style={styles.buttonRight}

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert, Image} from 'react-native';
 import { LoginScreen } from './components/screens/login';
 import { RegisterScreen,
         RegisterProc } from './components/screens/register';
@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ViewPolicyScreen } from './components/screens/view_policy';
 import { BuyPolicyScreen } from './components/screens/buy_policy';
 import Calls from './components/services/data';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const call = new Calls;
 const AuthStack = createStackNavigator();
@@ -30,7 +31,7 @@ const HomeStackScreen = () => (
 
 const PolicyStackScreen = () => (
   <PolicyStack.Navigator>
-    <PolicyStack.Screen name='New Policy' component={BuyPolicyScreen}/>
+    <PolicyStack.Screen name='Buy New Policy' component={BuyPolicyScreen}/>
   </PolicyStack.Navigator>
 );
 
@@ -62,10 +63,10 @@ const LoginProc = async val => {
   }
 }
 
-const getAllPolicies = async () => {
+const getAllPolicies = async token => {
   let _policies = null;
   try{
-    let res = await call.getPolicies();
+    let res = await call.getPolicies(token);
     if (!res){
       throw new Error(res)
     } else {
@@ -238,7 +239,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={contextValue}>
       <NavigationContainer>
-        {console.log(state.userToken, call.get_headers())}
+        {console.log("HERE:: " , state.userToken, call.get_headers())}
         {state.userToken ? call.update_headers({"token": state.userToken}) : null}
         {state.userToken==null?
           (
@@ -253,12 +254,22 @@ export default function App() {
               tabBarInactiveTintColor: 'gray',
             })}
           >
-            <Tabs.Screen name='Home' component={HomeScreen}/>
+            <Tabs.Screen 
+              name='My Policies' 
+              component={HomeScreen}
+              options = {{
+                tabBarIcon: ({size, color}) => (<Image source={require("./components/images/Home.png")} style={{width: 20, height: 20}} />)
+              }}  
+            />
             <Tabs.Screen
-              name='Policy'
-              options = {{headerShown : false}}
+              name='New Policy'
+              options = {{
+                headerShown : false,
+                tabBarIcon: ({size, color}) => (<Image source={require("./components/images/Policies.png")} style={{width: 20, height: 20}} />)              
+              }}
               component={PolicyStackScreen}
-              />
+            />
+            
           </Tabs.Navigator>
         )}
       </NavigationContainer>

@@ -120,14 +120,14 @@ export function BuyPolicyScreen({navigation}){
           <Pressable 
             style={styles.buyButton}
             onPress = {async () =>{
-              console.log("COORDS: ",coordinates)
+              console.log("COORDS && TIMES : ",coordinates , startDate.getTime()/1000, endDate)
               if (location && coordinates && startDate && endDate && maizeVariety){
                 let _policy_data = {
                   "location": location,
                   "maize_variety": maizeVariety,
                   "coordinates": coordinates,
-                  "start_date": Date.parse(startDate),
-                  "end_date": Date.parse(endDate)
+                  "start_date": startDate,
+                  "end_date": endDate
                 }
                 let res = await _buyPolicy(_policy_data)
                 if (res[0]){
